@@ -8,6 +8,7 @@ import (
 	"github.com/influxdata/telegraf/plugins/parsers/csv"
 	"github.com/influxdata/telegraf/plugins/parsers/dropwizard"
 	"github.com/influxdata/telegraf/plugins/parsers/form_urlencoded"
+	"github.com/influxdata/telegraf/plugins/parsers/gbt32960"
 	"github.com/influxdata/telegraf/plugins/parsers/graphite"
 	"github.com/influxdata/telegraf/plugins/parsers/grok"
 	"github.com/influxdata/telegraf/plugins/parsers/influx"
@@ -235,6 +236,8 @@ func NewParser(config *Config) (Parser, error) {
 			config.DefaultTags,
 			config.FormUrlencodedTagKeys,
 		)
+	case "gbt32960":
+		parser, err = NewGBT32960Parser(config.MetricName, config.DefaultTags)
 	case "prometheus":
 		parser, err = NewPrometheusParser(config.DefaultTags)
 	default:
@@ -331,6 +334,11 @@ func NewLogFmtParser(metricName string, defaultTags map[string]string) (Parser, 
 
 func NewWavefrontParser(defaultTags map[string]string) (Parser, error) {
 	return wavefront.NewWavefrontParser(defaultTags), nil
+}
+
+// NewGBT32960Parser returns a logfmt parser with the default options.
+func NewGBT32960Parser(metricName string, defaultTags map[string]string) (Parser, error) {
+	return gbt32960.NewParser(metricName, defaultTags), nil
 }
 
 func NewFormUrlencodedParser(
