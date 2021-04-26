@@ -69,21 +69,24 @@ all:
 .PHONY: help
 help:
 	@echo 'Targets:'
-	@echo '  all        - download dependencies and compile telegraf binary'
-	@echo '  deps       - download dependencies'
-	@echo '  telegraf   - compile telegraf binary'
-	@echo '  test       - run short unit tests'
-	@echo '  fmt        - format source files'
-	@echo '  tidy       - tidy go modules'
-	@echo '  check-deps - check docs/LICENSE_OF_DEPENDENCIES.md'
-	@echo '  clean      - delete build artifacts'
+	@echo '  all          - download dependencies and compile telegraf binary'
+	@echo '  deps         - download dependencies'
+	@echo '  telegraf     - compile telegraf binary'
+	@echo '  test         - run short unit tests'
+	@echo '  fmt          - format source files'
+	@echo '  tidy         - tidy go modules'
+	@echo '  lint         - run linter'
+	@echo '  lint-branch  - run linter on changes in current branch since master'
+	@echo '  lint-install - install linter'
+	@echo '  check-deps   - check docs/LICENSE_OF_DEPENDENCIES.md'
+	@echo '  clean        - delete build artifacts'
 	@echo ''
 	@echo 'Package Targets:'
 	@$(foreach dist,$(dists),echo "  $(dist)";)
 
 .PHONY: deps
 deps:
-	go mod download
+	go mod download -x
 
 .PHONY: telegraf
 telegraf:
@@ -130,6 +133,29 @@ vet:
 		exit 1; \
 	fi
 
+.PHONY: lint-install
+lint-install:
+
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.38.0
+
+.PHONY: lint
+lint:
+ifeq (, $(shell which golangci-lint))
+	$(info golangci-lint can't be found, please run: make lint-install)
+	exit 1
+endif
+
+	golangci-lint run
+
+.PHONY: lint-branch
+lint-branch:
+ifeq (, $(shell which golangci-lint))
+	$(info golangci-lint can't be found, please run: make lint-install)
+	exit 1
+endif
+
+	golangci-lint run --new-from-rev master
+
 .PHONY: tidy
 tidy:
 	go mod verify
@@ -141,7 +167,6 @@ tidy:
 
 .PHONY: check
 check: fmtcheck vet
-	@$(MAKE) --no-print-directory tidy
 
 .PHONY: test-all
 test-all: fmtcheck vet
@@ -171,13 +196,13 @@ plugin-%:
 
 .PHONY: ci-1.15
 ci-1.15:
-	docker build -t quay.io/influxdb/telegraf-ci:1.15.5 - < scripts/ci-1.15.docker
-	docker push quay.io/influxdb/telegraf-ci:1.15.5
+	docker build -t quay.io/influxdb/telegraf-ci:1.15.8 - < scripts/ci-1.15.docker
+	docker push quay.io/influxdb/telegraf-ci:1.15.8
 
-.PHONY: ci-1.14
-ci-1.14:
-	docker build -t quay.io/influxdb/telegraf-ci:1.14.9 - < scripts/ci-1.14.docker
-	docker push quay.io/influxdb/telegraf-ci:1.14.9
+.PHONY: ci-1.16
+ci-1.16:
+	docker build -t quay.io/influxdb/telegraf-ci:1.16.2 - < scripts/ci-1.16.docker
+	docker push quay.io/influxdb/telegraf-ci:1.16.2
 
 .PHONY: install
 install: $(buildbin)
@@ -203,6 +228,7 @@ $(buildbin):
 	@mkdir -pv $(dir $@)
 	go build -o $(dir $@) -ldflags "$(LDFLAGS)" ./cmd/telegraf
 
+ifdef debian
 debs := telegraf_$(deb_version)_amd64.deb
 debs += telegraf_$(deb_version)_arm64.deb
 debs += telegraf_$(deb_version)_armel.deb
@@ -212,7 +238,9 @@ debs += telegraf_$(deb_version)_mips.deb
 debs += telegraf_$(deb_version)_mipsel.deb
 debs += telegraf_$(deb_version)_s390x.deb
 debs += telegraf_$(deb_version)_ppc64el.deb
+endif
 
+ifdef centos
 rpms += telegraf-$(rpm_version).aarch64.rpm
 rpms += telegraf-$(rpm_version).armel.rpm
 rpms += telegraf-$(rpm_version).armv6hl.rpm
@@ -220,10 +248,18 @@ rpms += telegraf-$(rpm_version).i386.rpm
 rpms += telegraf-$(rpm_version).s390x.rpm
 rpms += telegraf-$(rpm_version).ppc64le.rpm
 rpms += telegraf-$(rpm_version).x86_64.rpm
+endif
 
+ifdef mac
 tars += telegraf-$(tar_version)_darwin_amd64.tar.gz
+endif
+
+ifdef freebsd
 tars += telegraf-$(tar_version)_freebsd_amd64.tar.gz
 tars += telegraf-$(tar_version)_freebsd_i386.tar.gz
+endif
+
+ifdef linux
 tars += telegraf-$(tar_version)_linux_amd64.tar.gz
 tars += telegraf-$(tar_version)_linux_arm64.tar.gz
 tars += telegraf-$(tar_version)_linux_armel.tar.gz
@@ -234,9 +270,12 @@ tars += telegraf-$(tar_version)_linux_mipsel.tar.gz
 tars += telegraf-$(tar_version)_linux_s390x.tar.gz
 tars += telegraf-$(tar_version)_linux_ppc64le.tar.gz
 tars += telegraf-$(tar_version)_static_linux_amd64.tar.gz
+endif
 
+ifdef windows
 zips += telegraf-$(tar_version)_windows_amd64.zip
 zips += telegraf-$(tar_version)_windows_i386.zip
+endif
 
 dists := $(debs) $(rpms) $(tars) $(zips)
 
