@@ -52,6 +52,9 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 		// skip BT 32960, [21], 数据单元加密方式
 	}
 
+	loc, _ := time.LoadLocation("Local")
+	strTime, _ := time.ParseInLocation("2006-01-02 15:04:05", msg.strTime, loc)
+
 	msg.len = uint16(b[offset+22])<<8 | uint16(b[offset+23]) + 25 // 消息封装固定长度为25
 	msg.body = b[offset : int(msg.len)+offset-1]
 
@@ -81,23 +84,16 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 			return nil, ErrNoMetric
 		}
 	}
+
 	if mapResult != nil {
-		mapResult["vin"] = string(msg.vin)
-		mapResult["iccid"] = string(msg.iccid)
+		metrics := make([]telegraf.Metric, 0)
+		m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
+		metrics = append(metrics, m)
+
+		return metrics, nil
+	} else {
+		return nil, nil
 	}
-
-	// if metric, err := metric.New("gbt32960", map[string]string{"iccid": msg.iccid, "vin": string(msg.vin)}, mapResult, time.Now().UTC()); err != nil {
-	// 	return nil, err
-	// } else {
-	// 	return []telegraf.Metric{metric}, nil
-	// }
-
-	metrics := make([]telegraf.Metric, 0)
-	// m := metric.New(measurement, tags, fieldValues, timestamp)
-	m := metric.New("gbt32960", nil, mapResult, time.Now().UTC())
-	metrics = append(metrics, m)
-
-	return metrics, nil
 }
 
 // ParseLine converts a single line of text in logfmt format to metrics.

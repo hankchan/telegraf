@@ -149,8 +149,9 @@ func (k *Kafka) receiver() {
 			} else {
 				metrics, err := k.parser.Parse(msg.Value)
 				if err != nil {
-					k.acc.AddError(fmt.Errorf("Message Parse Error\nmessage: %s\nerror: %s",
-						string(msg.Value), err.Error()))
+					// k.acc.AddError(fmt.Errorf("Message Parse Error\nmessage: %s\nerror: %s",
+					// 	string(msg.Value), err.Error()))
+					k.acc.AddError(fmt.Errorf("Message Parse Error: %s", err.Error()))
 				}
 				for _, metric := range metrics {
 					k.acc.AddFields(metric.Name(), metric.Fields(), metric.Tags(), metric.Time())

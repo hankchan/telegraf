@@ -495,10 +495,13 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 
 		case data_type >= 0x80 && data_type <= 0xFE: // "用户自定义"
 			//log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
-			if data_type == 0xA1 || data_type == 0xA0 || data_type == 0xA3 {
+			if data_type == 0xA0 || data_type == 0xA1 || data_type == 0xA2 || data_type == 0xA3 {
 				log.Printf("-> TOOD: BMS关键数据: %s %d %v", msg.vin, len(msg.body[i:]), msg.body[i:])
 				return ErrGbt32960Protocol // TODO: 这些数据不能丢
 			}
+			break
+
+			// TODO: LEWTEC148KN101201 46 [0 44 198 209 3 171 176 137 176 140 0 0 0 0 0 0 0 0 0 0 0 0 0 10 160 41 0 10 82 32 48 112 48 112 40 66 40 66 24 72 39 66 24 72 39 66]
 
 		// case data_type == 0xFF:
 		//  data_info = "---"
@@ -527,9 +530,9 @@ func (p *GBT32960Protocol) UnpackEVLogin(msg *GBT32960Message, mapResult *map[st
 			Pack_code:     string(msg.body[i+24 : msg.len-1]),
 		}
 
-		if j, err := json.Marshal(data); err == nil {
-			log.Printf("-> login: %s\n", j)
-		}
+		// if j, err := json.Marshal(data); err == nil {
+		// 	log.Printf("-> login: %s\n", j)
+		// }
 
 		i += (2 + 20 + 1 + 1 + int(data.Pack_code_len)*int(data.Pack_count))
 	}
