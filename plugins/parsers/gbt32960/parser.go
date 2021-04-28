@@ -81,6 +81,10 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 			return nil, ErrNoMetric
 		}
 	}
+	if mapResult != nil {
+		mapResult["vin"] = string(msg.vin)
+		mapResult["iccid"] = string(msg.iccid)
+	}
 
 	// if metric, err := metric.New("gbt32960", map[string]string{"iccid": msg.iccid, "vin": string(msg.vin)}, mapResult, time.Now().UTC()); err != nil {
 	// 	return nil, err
@@ -88,7 +92,12 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	// 	return []telegraf.Metric{metric}, nil
 	// }
 
-	return metric.New("gbt32960", map[string]string{"iccid": msg.iccid, "vin": string(msg.vin)}, mapResult, time.Now().UTC()), nil
+	metrics := make([]telegraf.Metric, 0)
+	// m := metric.New(measurement, tags, fieldValues, timestamp)
+	m := metric.New("gbt32960", nil, mapResult, time.Now().UTC())
+	metrics = append(metrics, m)
+
+	return metrics, nil
 }
 
 // ParseLine converts a single line of text in logfmt format to metrics.

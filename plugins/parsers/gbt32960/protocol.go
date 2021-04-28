@@ -292,7 +292,7 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 			i += binary.Size(data)
 
 			if j, err := json.Marshal(data); err == nil {
-				log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+				// log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
 
 				if err := json.Unmarshal([]byte(j), &mapResult); err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
@@ -544,13 +544,13 @@ func (p *GBT32960Protocol) UnpackEVLogout(msg *GBT32960Message, mapResult *map[s
 			break
 		}
 
-		data := &EvLogout{
-			Sn: binary.BigEndian.Uint16(msg.body[i : i+2]),
-		}
+		// data := &EvLogout{
+		// 	Sn: binary.BigEndian.Uint16(msg.body[i : i+2]),
+		// }
 
-		if j, err := json.Marshal(data); err == nil {
-			log.Printf("-> logout: %s\n", j)
-		}
+		// if j, err := json.Marshal(data); err == nil {
+		// 	log.Printf("-> logout: %s\n", j)
+		// }
 
 		i += 2
 	}
