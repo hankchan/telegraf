@@ -185,8 +185,6 @@ func (p *GBT32960Protocol) CheckCommandFlag(cmd_flag byte) string {
 		msg_cmd = "下行数据系统预留"
 	case cmd_flag >= 0xC0 && cmd_flag <= 0xFE:
 		msg_cmd = "平台交换自定义数据"
-	// case cmd_flag == 0xFF:
-	//  msg_cmd = "---"
 	default:
 		msg_cmd = "---"
 	}
@@ -215,27 +213,22 @@ func (p *GBT32960Protocol) CheckResponseFlag(resp_flag byte) string {
 
 // CheckDataType check
 func (p *GBT32960Protocol) CheckDataType(data_type byte) string {
-
 	var data_info string
-
 	switch {
 	case data_type == 0x01:
-		data_info = "整车数据"
+		data_info = "整车"
 	case data_type == 0x02:
-		//data_info = "驱动电机数据"
 		data_info = "驱动电机"
 	case data_type == 0x03:
-		//data_info = "燃料电池数据"
 		data_info = "燃料电池"
 	case data_type == 0x04:
-		data_info = "发动机数据"
+		data_info = "发动机"
 	case data_type == 0x05:
-		//data_info = "车辆位置数据"
 		data_info = "车辆位置"
 	case data_type == 0x06:
-		data_info = "极值数据"
+		data_info = "极值"
 	case data_type == 0x07:
-		data_info = "报警数据"
+		data_info = "报警"
 	// case data_type >= 0x08 && data_type <= 0x09:
 	// 	data_info = "终端数据预留"
 	case data_type == 0x08:
@@ -249,9 +242,12 @@ func (p *GBT32960Protocol) CheckDataType(data_type byte) string {
 	case data_type >= 0x30 && data_type <= 0x7F:
 		data_info = "预留"
 	case data_type >= 0x80 && data_type <= 0xFE:
+		// #define BMS_STAT_DATA_ID        0xA0
+		// #define BMS_KEY_DATA_ID         0xA1
+		// #define BMS_STAT_DATA_ID2       0xA2
+		// #define BMS_KEY_DATA_ID2        0xA3
+		// #define LMGM_GJ_DATA            0xB0
 		data_info = "用户自定义"
-	// case data_type == 0xFF:
-	//  data_info = "---"
 	default:
 		data_info = "---"
 	}
@@ -271,7 +267,11 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 		data_type := msg.body[i]
 		i += 1
 
+		// test
+		//log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
+
 		switch {
+
 		case data_type == 0x01: // "整车数据"
 
 			data := &VcuData{
@@ -503,11 +503,11 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 
 			// TODO: LEWTEC148KN101201 46 [0 44 198 209 3 171 176 137 176 140 0 0 0 0 0 0 0 0 0 0 0 0 0 10 160 41 0 10 82 32 48 112 48 112 40 66 40 66 24 72 39 66 24 72 39 66]
 
-		// case data_type == 0xFF:
-		//  data_info = "---"
-
+		case data_type == 0xFF:
+			log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 		default:
-			log.Printf("-> TOOD: unknown: %s %d %v", msg.vin, len(msg.body[i:]), msg.body[i:])
+			// log.Printf("-> TOOD: unknown: %s %d %v", msg.vin, len(msg.body[i:]), msg.body[i:])
+			log.Printf("-> TOOD: Err: %s %d %x", msg.vin, len(msg.body), msg.body)
 			return ErrGbt32960Protocol // TODO: 这些数据不能丢
 		}
 	}
@@ -531,7 +531,7 @@ func (p *GBT32960Protocol) UnpackEVLogin(msg *GBT32960Message, mapResult *map[st
 		}
 
 		// if j, err := json.Marshal(data); err == nil {
-		// 	log.Printf("-> login: %s\n", j)
+		// 	log.Printf("-> login: %s %s\n", msg.vin, j)
 		// }
 
 		i += (2 + 20 + 1 + 1 + int(data.Pack_code_len)*int(data.Pack_count))
@@ -552,7 +552,7 @@ func (p *GBT32960Protocol) UnpackEVLogout(msg *GBT32960Message, mapResult *map[s
 		// }
 
 		// if j, err := json.Marshal(data); err == nil {
-		// 	log.Printf("-> logout: %s\n", j)
+		// 	log.Printf("-> logout: %s %s\n", msg.vin, j)
 		// }
 
 		i += 2

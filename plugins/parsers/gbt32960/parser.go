@@ -52,19 +52,19 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 		// skip BT 32960, [21], 数据单元加密方式
 	}
 
-	loc, _ := time.LoadLocation("Local")
+	loc, _ := time.LoadLocation("Asia/Shanghai")
 	strTime, _ := time.ParseInLocation("2006-01-02 15:04:05", msg.strTime, loc)
 
 	msg.len = uint16(b[offset+22])<<8 | uint16(b[offset+23]) + 25 // 消息封装固定长度为25
 	msg.body = b[offset : int(msg.len)+offset-1]
+
+	// log.Printf("msg: %s %s %s %d %d\n", strTime.UTC(), string(msg.iccid), string(msg.vin), msg.len, len(msg.body))
 
 	var xor uint8
 	for i := 2; i < len(msg.body)-1; i++ {
 		xor ^= msg.body[i]
 	}
 	// TODO: chech crc
-
-	//log.Printf("msg: %s %s %s %d %d\n", string(datetime), string(iccid), string(msg.vin), msg_len, len(msg.body))
 
 	var mapResult map[string]interface{}
 	var GBT32960 = GBT32960Protocol{}
@@ -89,7 +89,6 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 		metrics := make([]telegraf.Metric, 0)
 		m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
 		metrics = append(metrics, m)
-
 		return metrics, nil
 	} else {
 		return nil, nil
