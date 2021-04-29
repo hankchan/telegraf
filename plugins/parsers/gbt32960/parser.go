@@ -32,66 +32,92 @@ func NewParser(metricName string, defaultTags map[string]string) *Parser {
 // Parse converts a slice of bytes in logfmt format to metrics.
 func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 
-	offset := 39 // kafka: iccid(20)+datatime(19)+gbt32960()
+	var msg = GBT32960Message{}
 
-	//log.Printf("buf: %x \n", b[offset:])
+	offset := 0
+	if b[0] != 0x20 {
+		// 默认情况，kafka: iccid(20)+datatime(19)+gbt32960()
+		offset = 39
+		msg.iccid = string(b[0:20])          // kafka里国标数据前有iccid
+		msg.strServerTime = string(b[20:39]) // kafka里国标数据前有格式化的时间戳
+	} else {
+		// 异常情况，有时kafka会出现第一个是0x20(空格)的情况，即没有iccid
+		// unknown msg start: 20323032312d30342d32392031313a31363a3339232303fe4c45575445423134344
+		offset = 20
+		msg.iccid = ""
+		msg.strServerTime = string(b[1:20]) // 异常情况时，只有时间戳
+	}
 
+	// 获取服务器时间戳
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	msg.serverTime, _ = time.ParseInLocation("2006-01-02 15:04:05", msg.strServerTime, loc)
+
+	// GBT 32960 报文头解析
 	// GBT 32960, [0,1]，起止符
 	if b[offset+0] != 0x23 || b[offset+1] != 0x23 {
-		log.Printf("-> TOOD: unknown msg start: %x...", b[:8])
+		log.Panicf("-> TOOD: msg start err: %x...", b)
 		return nil, ErrNoMetric
 	}
 
-	msg := GBT32960Message{
-		iccid:   string(b[0:20]),  // kafka里国标数据前有iccid
-		strTime: string(b[20:39]), // kafka里国标数据前有格式化的时间戳
-
-		cmd:  b[offset+2],
-		resp: b[offset+3],
-		vin:  b[offset+4 : offset+21],
-		// skip BT 32960, [21], 数据单元加密方式
-	}
-
-	loc, _ := time.LoadLocation("Asia/Shanghai")
-	strTime, _ := time.ParseInLocation("2006-01-02 15:04:05", msg.strTime, loc)
-
+	msg.cmd = b[offset+2]
+	msg.resp = b[offset+3]
+	msg.vin = b[offset+4 : offset+21]
 	msg.len = uint16(b[offset+22])<<8 | uint16(b[offset+23]) + 25 // 消息封装固定长度为25
 	msg.body = b[offset : int(msg.len)+offset-1]
 
-	// log.Printf("msg: %s %s %s %d %d\n", strTime.UTC(), string(msg.iccid), string(msg.vin), msg.len, len(msg.body))
+	//log.Printf("-> msg: %+v %x\n", msg, b)
+
+	if msg.cmd == 0x01 || msg.cmd == 0x02 || msg.cmd == 0x03 || msg.cmd == 0x04 {
+		//log.Printf("-> time: %d %d %d %d %d %d %v \n", 2000+int(b[offset+24]), int(b[offset+25]), int(b[offset+26]), int(b[offset+27]), int(b[offset+28]), int(b[offset+29]), b)
+		msg.tboxTime = time.Date(2000+int(b[offset+24]), time.Month(int(b[offset+25])), int(b[offset+26]), int(b[offset+27]), int(b[offset+28]), int(b[offset+29]), 0, loc)
+	}
 
 	var xor uint8
 	for i := 2; i < len(msg.body)-1; i++ {
 		xor ^= msg.body[i]
 	}
-	// TODO: chech crc
 
-	var mapResult map[string]interface{}
+	// TODO: check crc
+	//log.Printf("-> msg: %v %v %s %s %d %d\n", msg.serverTime, msg.tboxTime, string(msg.vin), string(msg.iccid), msg.len, len(msg.body))
+
+	// GBT 32960 报文体解析
 	var GBT32960 = GBT32960Protocol{}
+	var mapResult map[string]interface{}
 
 	switch {
-	case msg.cmd == 0x01: // 车辆登入
+	case msg.cmd == 0x01:
+		// 车辆登入
 		if err := GBT32960.UnpackEVLogin(&msg, &mapResult); err != nil {
+			log.Panicf("-> TOOD: UnpackEVLogin err: %x...", b)
 			return nil, ErrNoMetric
 		}
-	case msg.cmd == 0x02: // 实时信息上报
-	case msg.cmd == 0x03: // 补发信息上报
+	case msg.cmd == 0x02 || msg.cmd == 0x03:
+		// 实时信息上报 or 补发信息上报
 		if err := GBT32960.UnpackEVData(&msg, &mapResult); err != nil {
+			log.Panicf("-> TOOD: UnpackEVData err: %x...", b)
 			return nil, ErrNoMetric
 		}
-	case msg.cmd == 0x04: // 车辆登出
+	case msg.cmd == 0x04:
+		// 车辆登出
 		if err := GBT32960.UnpackEVLogout(&msg, &mapResult); err != nil {
+			log.Panicf("-> TOOD: UnpackEVLogout err: %x...", b)
 			return nil, ErrNoMetric
 		}
+	default:
+		// TODO: 暂不处理其他命令类型,参考CheckCommandFlag函数注释
+		//log.Printf("-> TOOD: msg.cmd err: %x %s %x...", msg.cmd, GBT32960.CheckCommandFlag(msg.cmd), b)
+		return nil, ErrNoMetric
 	}
 
+	// GBT 32960 报文解析结果存入influxDB
 	if mapResult != nil {
 		metrics := make([]telegraf.Metric, 0)
-		m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
+		// m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
+		m := metric.New("gbt32960", nil, mapResult, msg.tboxTime)
 		metrics = append(metrics, m)
 		return metrics, nil
 	} else {
-		return nil, nil
+		return nil, ErrNoMetric
 	}
 }
 

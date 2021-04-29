@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 )
 
 var (
@@ -13,14 +14,19 @@ var (
 
 // GBT32960Message struct
 type GBT32960Message struct {
-	iccid   string
-	strTime string
+	// kafka 消息头
+	iccid         string
+	strServerTime string
 
+	// 时间戳
+	tboxTime   time.Time
+	serverTime time.Time
+
+	// 国标数据结构
 	vin  []byte
 	len  uint16
 	cmd  byte
 	resp byte
-	time []byte
 	body []byte
 }
 
@@ -156,6 +162,22 @@ type ModuletData struct {
 }
 
 // CheckCommandFlag check
+// #define Command_Vehicle_Login		0x01
+// #define Command_RealTime_Info		0x02
+// #define Command_Reissue_Info			0x03
+// #define Command_Vehicle_LoginOut		0x04
+// #define Command_Platform_Login		0x05
+// #define Command_Platform_LoginOut	0x06
+// #define Command_Terminal_Beartbeat	0x07
+// #define Command_Terminal_School		0x08
+// #define Command_Platform_Query		0x80
+// #define Command_Platform_Set			0x81
+// #define Command_Platform_Contrl		0x82
+
+// #define HSCommand_CHK				0x50
+// #define HSCommand_CHK_GJ				0x51
+// #define HSCommand_CHK_GJ_CFG_RP		0x52
+
 func (p *GBT32960Protocol) CheckCommandFlag(cmd_flag byte) string {
 
 	var msg_cmd string
@@ -265,10 +287,8 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 		}
 
 		data_type := msg.body[i]
+		//log.Printf("-> %d %x %v %d %x\n", i, data_type, p.CheckDataType(data_type), len(msg.body[i:]), msg.body[i:])
 		i += 1
-
-		// test
-		//log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 
 		switch {
 
@@ -484,9 +504,7 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 				// if j, err := json.Marshal(data); err == nil {
 				// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
 				// }
-
 			}
-
 		case data_type >= 0x0A && data_type <= 0x2F: //"平台交换协议自定义数据"
 			log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 
@@ -496,18 +514,16 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 		case data_type >= 0x80 && data_type <= 0xFE: // "用户自定义"
 			//log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 			if data_type == 0xA0 || data_type == 0xA1 || data_type == 0xA2 || data_type == 0xA3 {
-				log.Printf("-> TOOD: BMS关键数据: %s %d %v", msg.vin, len(msg.body[i:]), msg.body[i:])
-				return ErrGbt32960Protocol // TODO: 这些数据不能丢
+
+				customLen := binary.BigEndian.Uint16(msg.body[i : i+2])
+				// log.Printf("-> TOOD: BMS关键数据: %s %d %x %d", msg.vin, len(msg.body[i:]), msg.body[i:], customLen)
+				i += (2 + int(customLen))
+			} else {
+				log.Panicf("-> TOOD: 未解析自定义数据: %s %d %x", msg.vin, len(msg.body), msg.body)
 			}
-			break
-
-			// TODO: LEWTEC148KN101201 46 [0 44 198 209 3 171 176 137 176 140 0 0 0 0 0 0 0 0 0 0 0 0 0 10 160 41 0 10 82 32 48 112 48 112 40 66 40 66 24 72 39 66 24 72 39 66]
-
-		case data_type == 0xFF:
-			log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 		default:
-			// log.Printf("-> TOOD: unknown: %s %d %v", msg.vin, len(msg.body[i:]), msg.body[i:])
-			log.Printf("-> TOOD: Err: %s %d %x", msg.vin, len(msg.body), msg.body)
+			// log.Printf("-> TOOD: unknown: %s %d %x", msg.vin, len(msg.body[i:]), msg.body[i:])
+			log.Panicf("-> TOOD: 未知数据类型: %s %d %x", msg.vin, len(msg.body), msg.body)
 			return ErrGbt32960Protocol // TODO: 这些数据不能丢
 		}
 	}
