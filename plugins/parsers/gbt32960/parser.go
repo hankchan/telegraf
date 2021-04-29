@@ -56,7 +56,7 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	// GBT 32960, [0,1]，起止符
 	if b[offset+0] != 0x23 || b[offset+1] != 0x23 {
 		log.Panicf("-> TOOD: msg start err: %x...", b)
-		return nil, ErrNoMetric
+		return nil, nil
 	}
 
 	msg.cmd = b[offset+2]
@@ -78,46 +78,49 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	}
 
 	// TODO: check crc
+
 	//log.Printf("-> msg: %v %v %s %s %d %d\n", msg.serverTime, msg.tboxTime, string(msg.vin), string(msg.iccid), msg.len, len(msg.body))
 
 	// GBT 32960 报文体解析
-	var GBT32960 = GBT32960Protocol{}
+
+	var err error
 	var mapResult map[string]interface{}
+	var GBT32960 = GBT32960Protocol{}
 
 	switch {
 	case msg.cmd == 0x01:
 		// 车辆登入
-		if err := GBT32960.UnpackEVLogin(&msg, &mapResult); err != nil {
+		if mapResult, err = GBT32960.UnpackEVLogin(&msg); err != nil {
 			log.Panicf("-> TOOD: UnpackEVLogin err: %x...", b)
 			return nil, ErrNoMetric
 		}
 	case msg.cmd == 0x02 || msg.cmd == 0x03:
 		// 实时信息上报 or 补发信息上报
-		if err := GBT32960.UnpackEVData(&msg, &mapResult); err != nil {
+		if mapResult, err = GBT32960.UnpackEVData(&msg); err != nil {
 			log.Panicf("-> TOOD: UnpackEVData err: %x...", b)
 			return nil, ErrNoMetric
 		}
 	case msg.cmd == 0x04:
 		// 车辆登出
-		if err := GBT32960.UnpackEVLogout(&msg, &mapResult); err != nil {
+		if mapResult, err = GBT32960.UnpackEVLogout(&msg); err != nil {
 			log.Panicf("-> TOOD: UnpackEVLogout err: %x...", b)
 			return nil, ErrNoMetric
 		}
 	default:
 		// TODO: 暂不处理其他命令类型,参考CheckCommandFlag函数注释
 		//log.Printf("-> TOOD: msg.cmd err: %x %s %x...", msg.cmd, GBT32960.CheckCommandFlag(msg.cmd), b)
-		return nil, ErrNoMetric
+		return nil, nil
 	}
 
 	// GBT 32960 报文解析结果存入influxDB
 	if mapResult != nil {
 		metrics := make([]telegraf.Metric, 0)
 		// m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
-		m := metric.New("gbt32960", nil, mapResult, msg.tboxTime)
+		m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, mapResult, msg.tboxTime)
 		metrics = append(metrics, m)
 		return metrics, nil
 	} else {
-		return nil, ErrNoMetric
+		return nil, nil
 	}
 }
 

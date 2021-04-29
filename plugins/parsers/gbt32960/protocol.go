@@ -277,7 +277,9 @@ func (p *GBT32960Protocol) CheckDataType(data_type byte) string {
 }
 
 // UnpackEVData converts a slice of bytes in logfmt format to metrics.
-func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[string]interface{}) error {
+func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interface{}, error) {
+
+	var result map[string]interface{}
 
 	// 数据单元起始字节30，数据单元结束字节(msg.len-1)
 	i := 30
@@ -314,9 +316,9 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 			if j, err := json.Marshal(data); err == nil {
 				// log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
 
-				if err := json.Unmarshal([]byte(j), &mapResult); err != nil {
+				if err := json.Unmarshal([]byte(j), &result); err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
-					return nil
+					return nil, err
 				}
 			}
 
@@ -338,15 +340,13 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 				}
 				i += binary.Size(data)
 
-				// if j, err := json.Marshal(data); err == nil {
-				// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+				if j, err := json.Marshal(data); err == nil {
+					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
 
-				// 	var mapResult map[string]interface{}
-				// 	if err := json.Unmarshal([]byte(j), &mapResult); err != nil {
-				// 		fmt.Println("JsonToMapDemo err: ", err)
-				// 	}
-				// 	return mapResult, nil
-				// }
+					if err := json.Unmarshal([]byte(j), &result); err != nil {
+						fmt.Println("JsonToMapDemo err: ", err)
+					}
+				}
 			}
 
 		case data_type == 0x03: //"燃料电池数据"
@@ -388,9 +388,13 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 			}
 			i += binary.Size(data)
 
-			// if j, err := json.Marshal(data); err == nil {
-			// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-			// }
+			if j, err := json.Marshal(data); err == nil {
+				//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+
+				if err := json.Unmarshal([]byte(j), &result); err != nil {
+					fmt.Println("JsonToMapDemo err: ", err)
+				}
+			}
 
 		case data_type == 0x07: // "报警数据"
 
@@ -473,10 +477,13 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 					i += 0
 				}
 
-				// if j, err := json.Marshal(data); err == nil {
-				// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-				// }
+				if j, err := json.Marshal(data); err == nil {
+					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
 
+					if err := json.Unmarshal([]byte(j), &result); err != nil {
+						fmt.Println("JsonToMapDemo err: ", err)
+					}
+				}
 			}
 
 		case data_type == 0x09: //"可充电储能装置温度数据"
@@ -501,9 +508,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 					i += 0
 				}
 
-				// if j, err := json.Marshal(data); err == nil {
-				// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-				// }
+				if j, err := json.Marshal(data); err == nil {
+					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+					if err := json.Unmarshal([]byte(j), &result); err != nil {
+						fmt.Println("JsonToMapDemo err: ", err)
+					}
+				}
 			}
 		case data_type >= 0x0A && data_type <= 0x2F: //"平台交换协议自定义数据"
 			log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
@@ -524,14 +534,17 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message, mapResult *map[str
 		default:
 			// log.Printf("-> TOOD: unknown: %s %d %x", msg.vin, len(msg.body[i:]), msg.body[i:])
 			log.Panicf("-> TOOD: 未知数据类型: %s %d %x", msg.vin, len(msg.body), msg.body)
-			return ErrGbt32960Protocol // TODO: 这些数据不能丢
+			return nil, ErrGbt32960Protocol // TODO: 这些数据不能丢
 		}
 	}
-	return nil
+	return result, nil
 }
 
 // UnpackEVLogin login
-func (p *GBT32960Protocol) UnpackEVLogin(msg *GBT32960Message, mapResult *map[string]interface{}) error {
+func (p *GBT32960Protocol) UnpackEVLogin(msg *GBT32960Message) (map[string]interface{}, error) {
+
+	var result map[string]interface{}
+
 	i := 30
 	for {
 		if i >= int(msg.len-1) {
@@ -552,11 +565,14 @@ func (p *GBT32960Protocol) UnpackEVLogin(msg *GBT32960Message, mapResult *map[st
 
 		i += (2 + 20 + 1 + 1 + int(data.Pack_code_len)*int(data.Pack_count))
 	}
-	return nil
+	return result, nil
 }
 
 // UnpackEVLogout logout
-func (p *GBT32960Protocol) UnpackEVLogout(msg *GBT32960Message, mapResult *map[string]interface{}) error {
+func (p *GBT32960Protocol) UnpackEVLogout(msg *GBT32960Message) (map[string]interface{}, error) {
+
+	var result map[string]interface{}
+
 	i := 30
 	for {
 		if i >= int(msg.len-1) {
@@ -573,5 +589,5 @@ func (p *GBT32960Protocol) UnpackEVLogout(msg *GBT32960Message, mapResult *map[s
 
 		i += 2
 	}
-	return nil
+	return result, nil
 }
