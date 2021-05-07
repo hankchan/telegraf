@@ -315,7 +315,6 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 
 			if j, err := json.Marshal(data); err == nil {
 				// log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-
 				if err := json.Unmarshal([]byte(j), &result); err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
 					return nil, err
@@ -342,7 +341,6 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 
 				if j, err := json.Marshal(data); err == nil {
 					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-
 					if err := json.Unmarshal([]byte(j), &result); err != nil {
 						fmt.Println("JsonToMapDemo err: ", err)
 					}
@@ -366,9 +364,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 			}
 			i += binary.Size(data)
 
-			// if j, err := json.Marshal(data); err == nil {
-			// 	log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-			// }
+			if j, err := json.Marshal(data); err == nil {
+				//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+				if err := json.Unmarshal([]byte(j), &result); err != nil {
+					fmt.Println("JsonToMapDemo err: ", err)
+				}
+			}
 
 		case data_type == 0x06: //"极值数据"
 
@@ -390,7 +391,6 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 
 			if j, err := json.Marshal(data); err == nil {
 				//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-
 				if err := json.Unmarshal([]byte(j), &result); err != nil {
 					fmt.Println("JsonToMapDemo err: ", err)
 				}
@@ -479,7 +479,6 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 
 				if j, err := json.Marshal(data); err == nil {
 					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-
 					if err := json.Unmarshal([]byte(j), &result); err != nil {
 						fmt.Println("JsonToMapDemo err: ", err)
 					}
