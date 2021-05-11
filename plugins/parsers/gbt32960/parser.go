@@ -87,6 +87,11 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	var mapResult map[string]interface{}
 	var GBT32960 = GBT32960Protocol{}
 
+	metrics := make([]telegraf.Metric, 0)
+
+	m1 := metric.New("gbt32960_msg", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, map[string]interface{}{GBT32960.CheckCommandFlag(msg.cmd): 1}, msg.tboxTime)
+	metrics = append(metrics, m1)
+
 	switch {
 	case msg.cmd == 0x01:
 		// 车辆登入
@@ -109,19 +114,16 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	default:
 		// TODO: 暂不处理其他命令类型,参考CheckCommandFlag函数注释
 		//log.Printf("-> TOOD: msg.cmd err: %x %s %x...", msg.cmd, GBT32960.CheckCommandFlag(msg.cmd), b)
-		return nil, nil
 	}
 
 	// GBT 32960 报文解析结果存入influxDB
+
 	if mapResult != nil {
-		metrics := make([]telegraf.Metric, 0)
 		// m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
-		m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, mapResult, msg.tboxTime)
-		metrics = append(metrics, m)
-		return metrics, nil
-	} else {
-		return nil, nil
+		m2 := metric.New("gbt32960", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, mapResult, msg.tboxTime)
+		metrics = append(metrics, m2)
 	}
+	return metrics, nil
 }
 
 // ParseLine converts a single line of text in logfmt format to metrics.

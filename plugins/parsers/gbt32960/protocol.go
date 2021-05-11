@@ -364,12 +364,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 			}
 			i += binary.Size(data)
 
-			if j, err := json.Marshal(data); err == nil {
-				//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-				if err := json.Unmarshal([]byte(j), &result); err != nil {
-					fmt.Println("JsonToMapDemo err: ", err)
-				}
-			}
+			// if j, err := json.Marshal(data); err == nil {
+			// 	//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+			// 	if err := json.Unmarshal([]byte(j), &result); err != nil {
+			// 		fmt.Println("JsonToMapDemo err: ", err)
+			// 	}
+			// }
 
 		case data_type == 0x06: //"极值数据"
 
@@ -389,12 +389,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 			}
 			i += binary.Size(data)
 
-			if j, err := json.Marshal(data); err == nil {
-				//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-				if err := json.Unmarshal([]byte(j), &result); err != nil {
-					fmt.Println("JsonToMapDemo err: ", err)
-				}
-			}
+			// if j, err := json.Marshal(data); err == nil {
+			// 	//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+			// 	if err := json.Unmarshal([]byte(j), &result); err != nil {
+			// 		fmt.Println("JsonToMapDemo err: ", err)
+			// 	}
+			// }
 
 		case data_type == 0x07: // "报警数据"
 
@@ -477,12 +477,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 					i += 0
 				}
 
-				if j, err := json.Marshal(data); err == nil {
-					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-					if err := json.Unmarshal([]byte(j), &result); err != nil {
-						fmt.Println("JsonToMapDemo err: ", err)
-					}
-				}
+				// if j, err := json.Marshal(data); err == nil {
+				// 	//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+				// 	if err := json.Unmarshal([]byte(j), &result); err != nil {
+				// 		fmt.Println("JsonToMapDemo err: ", err)
+				// 	}
+				// }
 			}
 
 		case data_type == 0x09: //"可充电储能装置温度数据"
@@ -507,12 +507,12 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 					i += 0
 				}
 
-				if j, err := json.Marshal(data); err == nil {
-					//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
-					if err := json.Unmarshal([]byte(j), &result); err != nil {
-						fmt.Println("JsonToMapDemo err: ", err)
-					}
-				}
+				// if j, err := json.Marshal(data); err == nil {
+				// 	//log.Printf("-> %v %s\n", p.CheckDataType(data_type), j)
+				// 	if err := json.Unmarshal([]byte(j), &result); err != nil {
+				// 		fmt.Println("JsonToMapDemo err: ", err)
+				// 	}
+				// }
 			}
 		case data_type >= 0x0A && data_type <= 0x2F: //"平台交换协议自定义数据"
 			log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))

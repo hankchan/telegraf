@@ -1,0 +1,238 @@
+nohup: ignoring input
+2021-05-10T09:58:38Z I! Starting Telegraf 
+2021-05-10T09:58:38Z I! Loaded inputs: kafka_consumer_legacy
+2021-05-10T09:58:38Z I! Loaded aggregators: 
+2021-05-10T09:58:38Z I! Loaded processors: 
+2021-05-10T09:58:38Z I! Loaded outputs: influxdb_v2
+2021-05-10T09:58:38Z I! Tags enabled: host=iZm5e0p2kosr31l7bhv5e6Z
+2021-05-10T09:58:38Z I! [agent] Config: Interval:10s, Quiet:false, Hostname:"iZm5e0p2kosr31l7bhv5e6Z", Flush Interval:10s
+2021-05-10T09:58:38Z D! [agent] Initializing plugins
+2021-05-10T09:58:38Z D! [agent] Connecting outputs
+2021-05-10T09:58:38Z D! [agent] Attempting connection to [outputs.influxdb_v2]
+2021-05-10T09:58:38Z D! [agent] Successfully connected to outputs.influxdb_v2
+2021-05-10T09:58:38Z D! [agent] Starting service inputs
+2021-05-10T09:58:38Z I! Connected to 10.30.215.216:2181
+2021-05-10T09:58:38Z I! authenticated: id=177480819593377405, timeout=4000
+2021-05-10T09:58:38Z I! re-submitting `0` credentials after reconnect
+2021-05-10T09:58:38Z D! [sarama]  Initializing new client
+2021-05-10T09:58:38Z D! [sarama] client/metadata fetching metadata for all topics from broker iZ289fvg083Z:9092
+2021-05-10T09:58:38Z D! [sarama] Connected to broker at iZ289fvg083Z:9092 (unregistered)
+2021-05-10T09:58:38Z D! [sarama] client/brokers registered new broker #86 at iZ289fvg083Z:9092
+2021-05-10T09:58:38Z D! [sarama] client/brokers registered new broker #85 at iZ28c62cjleZ:9092
+2021-05-10T09:58:38Z D! [sarama] client/brokers registered new broker #84 at iZ285s9aj9lZ:9092
+2021-05-10T09:58:38Z D! [sarama]  Successfully initialized new client
+2021-05-10T09:58:38Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] Consumer instance registered (iZm5e0p2kosr31l7bhv5e6Z:9d2a6a54-c6c6-4656-b51a-f672060caefc).
+2021-05-10T09:58:38Z I! [inputs.kafka_consumer_legacy] Started the kafka consumer service, peers: [10.30.215.216:2181], topics: [hyperstrong-rms-streaming-topic]
+2021-05-10T09:58:38Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] Currently registered consumers: 1
+2021-05-10T09:58:38Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] hyperstrong-rms-streaming-topic :: Started topic consumer
+2021-05-10T09:58:38Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] hyperstrong-rms-streaming-topic :: Claiming 3 of 3 partitions
+2021-05-10T09:58:39Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] hyperstrong-rms-streaming-topic/2 :: Partition consumer starting at offset 2079967905.
+2021-05-10T09:58:39Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] hyperstrong-rms-streaming-topic/0 :: Partition consumer starting at offset 2079969994.
+2021-05-10T09:58:39Z D! [sarama] Connected to broker at iZ285s9aj9lZ:9092 (registered as #84)
+2021-05-10T09:58:39Z D! [sarama] Connected to broker at iZ28c62cjleZ:9092 (registered as #85)
+2021-05-10T09:58:39Z D! [sarama] [telegraf_metrics_consumers_ev/f672060caefc] hyperstrong-rms-streaming-topic/1 :: Partition consumer starting at offset 2079875009.
+2021-05-10T09:58:39Z D! [sarama] Connected to broker at iZ289fvg083Z:9092 (registered as #86)
+2021-05-10T09:58:39Z D! [sarama] consumer/broker/85 added subscription to hyperstrong-rms-streaming-topic/0
+2021-05-10T09:58:39Z D! [sarama] consumer/broker/84 added subscription to hyperstrong-rms-streaming-topic/2
+2021-05-10T09:58:39Z D! [sarama] consumer/broker/86 added subscription to hyperstrong-rms-streaming-topic/1
+2021-05-10T09:58:40Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=26
+2021-05-10T09:58:40Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 918.524357ms
+2021-05-10T09:58:40Z D! [outputs.influxdb_v2] Buffer fullness: 6730 / 10000 metrics
+2021-05-10T09:58:40Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=20
+2021-05-10T09:58:40Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 315.773676ms
+2021-05-10T09:58:40Z D! [outputs.influxdb_v2] Buffer fullness: 5906 / 10000 metrics
+2021-05-10T09:58:42Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=38
+2021-05-10T09:58:42Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 313.14832ms
+2021-05-10T09:58:42Z D! [outputs.influxdb_v2] Buffer fullness: 5364 / 10000 metrics
+2021-05-10T09:58:46Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=26
+2021-05-10T09:58:46Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 325.774616ms
+2021-05-10T09:58:46Z D! [outputs.influxdb_v2] Buffer fullness: 5174 / 10000 metrics
+2021-05-10T09:58:50Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=20
+2021-05-10T09:58:50Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 309.462542ms
+2021-05-10T09:58:50Z D! [outputs.influxdb_v2] Buffer fullness: 5048 / 10000 metrics
+2021-05-10T09:58:52Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=18
+2021-05-10T09:58:52Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 309.351046ms
+2021-05-10T09:58:52Z D! [outputs.influxdb_v2] Buffer fullness: 5064 / 10000 metrics
+2021-05-10T09:58:57Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=16
+2021-05-10T09:58:57Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 301.404848ms
+2021-05-10T09:58:57Z D! [outputs.influxdb_v2] Buffer fullness: 5190 / 10000 metrics
+2021-05-10T09:59:02Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=62
+2021-05-10T09:59:02Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 309.483068ms
+2021-05-10T09:59:02Z D! [outputs.influxdb_v2] Buffer fullness: 5358 / 10000 metrics
+2021-05-10T09:59:07Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=18
+2021-05-10T09:59:07Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 320.869117ms
+2021-05-10T09:59:07Z D! [outputs.influxdb_v2] Buffer fullness: 5422 / 10000 metrics
+2021-05-10T09:59:11Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=22
+2021-05-10T09:59:11Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 314.421621ms
+2021-05-10T09:59:11Z D! [outputs.influxdb_v2] Buffer fullness: 5136 / 10000 metrics
+2021-05-10T09:59:16Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=22
+2021-05-10T09:59:16Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 299.372257ms
+2021-05-10T09:59:16Z D! [outputs.influxdb_v2] Buffer fullness: 5256 / 10000 metrics
+2021-05-10T09:59:20Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=20
+2021-05-10T09:59:20Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 321.373459ms
+2021-05-10T09:59:20Z D! [outputs.influxdb_v2] Buffer fullness: 5178 / 10000 metrics
+2021-05-10T09:59:22Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=42
+2021-05-10T09:59:22Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 323.549556ms
+2021-05-10T09:59:22Z D! [outputs.influxdb_v2] Buffer fullness: 5020 / 10000 metrics
+2021-05-10T09:59:27Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=14
+2021-05-10T09:59:27Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 317.56703ms
+2021-05-10T09:59:27Z D! [outputs.influxdb_v2] Buffer fullness: 5204 / 10000 metrics
+2021-05-10T09:59:32Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=36
+2021-05-10T09:59:32Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 307.867887ms
+2021-05-10T09:59:32Z D! [outputs.influxdb_v2] Buffer fullness: 5328 / 10000 metrics
+2021-05-10T09:59:36Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=30
+2021-05-10T09:59:36Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 328.304661ms
+2021-05-10T09:59:36Z D! [outputs.influxdb_v2] Buffer fullness: 5026 / 10000 metrics
+2021-05-10T09:59:41Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=18
+2021-05-10T09:59:41Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 304.673572ms
+2021-05-10T09:59:41Z D! [outputs.influxdb_v2] Buffer fullness: 5350 / 10000 metrics
+2021-05-10T09:59:43Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=34
+2021-05-10T09:59:43Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 303.134038ms
+2021-05-10T09:59:43Z D! [outputs.influxdb_v2] Buffer fullness: 5018 / 10000 metrics
+2021-05-10T09:59:48Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=10
+2021-05-10T09:59:48Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 308.385586ms
+2021-05-10T09:59:48Z D! [outputs.influxdb_v2] Buffer fullness: 5164 / 10000 metrics
+2021-05-10T09:59:52Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=58
+2021-05-10T09:59:52Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 367.335454ms
+2021-05-10T09:59:52Z D! [outputs.influxdb_v2] Buffer fullness: 5088 / 10000 metrics
+2021-05-10T09:59:56Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=18
+2021-05-10T09:59:56Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 299.345394ms
+2021-05-10T09:59:56Z D! [outputs.influxdb_v2] Buffer fullness: 5020 / 10000 metrics
+2021-05-10T10:00:01Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=44
+2021-05-10T10:00:01Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 315.093568ms
+2021-05-10T10:00:01Z D! [outputs.influxdb_v2] Buffer fullness: 5056 / 10000 metrics
+2021-05-10T10:00:06Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=38
+2021-05-10T10:00:06Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 302.763445ms
+2021-05-10T10:00:06Z D! [outputs.influxdb_v2] Buffer fullness: 5058 / 10000 metrics
+2021-05-10T10:00:08Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=36
+2021-05-10T10:00:08Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 320.46963ms
+2021-05-10T10:00:08Z D! [outputs.influxdb_v2] Buffer fullness: 5012 / 10000 metrics
+2021-05-10T10:00:13Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=84
+2021-05-10T10:00:13Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 320.480455ms
+2021-05-10T10:00:13Z D! [outputs.influxdb_v2] Buffer fullness: 5194 / 10000 metrics
+2021-05-10T10:00:17Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=20
+2021-05-10T10:00:17Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 318.119829ms
+2021-05-10T10:00:17Z D! [outputs.influxdb_v2] Buffer fullness: 5194 / 10000 metrics
+2021-05-10T10:00:22Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=66
+2021-05-10T10:00:22Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 319.286138ms
+2021-05-10T10:00:22Z D! [outputs.influxdb_v2] Buffer fullness: 5392 / 10000 metrics
+2021-05-10T10:00:26Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=38
+2021-05-10T10:00:26Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 314.93203ms
+2021-05-10T10:00:26Z D! [outputs.influxdb_v2] Buffer fullness: 5252 / 10000 metrics
+2021-05-10T10:00:31Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=36
+2021-05-10T10:00:31Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 329.021932ms
+2021-05-10T10:00:31Z D! [outputs.influxdb_v2] Buffer fullness: 5290 / 10000 metrics
+2021-05-10T10:00:33Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=80
+2021-05-10T10:00:33Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 311.485568ms
+2021-05-10T10:00:33Z D! [outputs.influxdb_v2] Buffer fullness: 5208 / 10000 metrics
+2021-05-10T10:00:38Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=36
+2021-05-10T10:00:38Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 391.151441ms
+2021-05-10T10:00:38Z D! [outputs.influxdb_v2] Buffer fullness: 5194 / 10000 metrics
+2021-05-10T10:00:43Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=72
+2021-05-10T10:00:43Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 340.791845ms
+2021-05-10T10:00:43Z D! [outputs.influxdb_v2] Buffer fullness: 5182 / 10000 metrics
+2021-05-10T10:00:48Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=42
+2021-05-10T10:00:48Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 318.034888ms
+2021-05-10T10:00:48Z D! [outputs.influxdb_v2] Buffer fullness: 5306 / 10000 metrics
+2021-05-10T10:00:52Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=46
+2021-05-10T10:00:52Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 347.559566ms
+2021-05-10T10:00:52Z D! [outputs.influxdb_v2] Buffer fullness: 5050 / 10000 metrics
+2021-05-10T10:00:57Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=52
+2021-05-10T10:00:57Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 346.132099ms
+2021-05-10T10:00:57Z D! [outputs.influxdb_v2] Buffer fullness: 5324 / 10000 metrics
+2021-05-10T10:00:58Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=36
+2021-05-10T10:00:58Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 301.879363ms
+2021-05-10T10:00:58Z D! [outputs.influxdb_v2] Buffer fullness: 5008 / 10000 metrics
+2021-05-10T10:01:03Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=64
+2021-05-10T10:01:03Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 315.328369ms
+2021-05-10T10:01:03Z D! [outputs.influxdb_v2] Buffer fullness: 5182 / 10000 metrics
+2021-05-10T10:01:08Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=26
+2021-05-10T10:01:08Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 429.601085ms
+2021-05-10T10:01:08Z D! [outputs.influxdb_v2] Buffer fullness: 5226 / 10000 metrics
+2021-05-10T10:01:13Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=74
+2021-05-10T10:01:13Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 307.07381ms
+2021-05-10T10:01:13Z D! [outputs.influxdb_v2] Buffer fullness: 5404 / 10000 metrics
+2021-05-10T10:01:17Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=42
+2021-05-10T10:01:17Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 310.380825ms
+2021-05-10T10:01:17Z D! [outputs.influxdb_v2] Buffer fullness: 5130 / 10000 metrics
+2021-05-10T10:01:21Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=42
+2021-05-10T10:01:21Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 314.992653ms
+2021-05-10T10:01:21Z D! [outputs.influxdb_v2] Buffer fullness: 5058 / 10000 metrics
+2021-05-10T10:01:23Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=74
+2021-05-10T10:01:23Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 317.429163ms
+2021-05-10T10:01:23Z D! [outputs.influxdb_v2] Buffer fullness: 5174 / 10000 metrics
+2021-05-10T10:01:28Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=22
+2021-05-10T10:01:28Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 333.803858ms
+2021-05-10T10:01:28Z D! [outputs.influxdb_v2] Buffer fullness: 5106 / 10000 metrics
+2021-05-10T10:01:33Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=70
+2021-05-10T10:01:33Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 320.538389ms
+2021-05-10T10:01:33Z D! [outputs.influxdb_v2] Buffer fullness: 5424 / 10000 metrics
+2021-05-10T10:01:37Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=44
+2021-05-10T10:01:37Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 352.598564ms
+2021-05-10T10:01:37Z D! [outputs.influxdb_v2] Buffer fullness: 5034 / 10000 metrics
+2021-05-10T10:01:42Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=68
+2021-05-10T10:01:42Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 317.277873ms
+2021-05-10T10:01:42Z D! [outputs.influxdb_v2] Buffer fullness: 5186 / 10000 metrics
+2021-05-10T10:01:47Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=60
+2021-05-10T10:01:47Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 330.606891ms
+2021-05-10T10:01:47Z D! [outputs.influxdb_v2] Buffer fullness: 5380 / 10000 metrics
+2021-05-10T10:01:48Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=54
+2021-05-10T10:01:48Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 300.028936ms
+2021-05-10T10:01:48Z D! [outputs.influxdb_v2] Buffer fullness: 5026 / 10000 metrics
+2021-05-10T10:01:53Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=38
+2021-05-10T10:01:53Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 333.836893ms
+2021-05-10T10:01:53Z D! [outputs.influxdb_v2] Buffer fullness: 5076 / 10000 metrics
+2021-05-10T10:01:58Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=46
+2021-05-10T10:01:58Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 343.211297ms
+2021-05-10T10:01:58Z D! [outputs.influxdb_v2] Buffer fullness: 5280 / 10000 metrics
+2021-05-10T10:02:02Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=82
+2021-05-10T10:02:02Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 301.759102ms
+2021-05-10T10:02:02Z D! [outputs.influxdb_v2] Buffer fullness: 5084 / 10000 metrics
+2021-05-10T10:02:07Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=44
+2021-05-10T10:02:07Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 482.777784ms
+2021-05-10T10:02:07Z D! [outputs.influxdb_v2] Buffer fullness: 5296 / 10000 metrics
+2021-05-10T10:02:12Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=58
+2021-05-10T10:02:12Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 321.160541ms
+2021-05-10T10:02:12Z D! [outputs.influxdb_v2] Buffer fullness: 5294 / 10000 metrics
+2021-05-10T10:02:17Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=60
+2021-05-10T10:02:17Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 318.791614ms
+2021-05-10T10:02:17Z D! [outputs.influxdb_v2] Buffer fullness: 5332 / 10000 metrics
+2021-05-10T10:02:19Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=44
+2021-05-10T10:02:19Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 341.501389ms
+2021-05-10T10:02:19Z D! [outputs.influxdb_v2] Buffer fullness: 5230 / 10000 metrics
+2021-05-10T10:02:23Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=50
+2021-05-10T10:02:23Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 313.687722ms
+2021-05-10T10:02:23Z D! [outputs.influxdb_v2] Buffer fullness: 5444 / 10000 metrics
+2021-05-10T10:02:27Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=40
+2021-05-10T10:02:27Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 315.659424ms
+2021-05-10T10:02:27Z D! [outputs.influxdb_v2] Buffer fullness: 5048 / 10000 metrics
+2021-05-10T10:02:32Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=70
+2021-05-10T10:02:32Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 299.664267ms
+2021-05-10T10:02:32Z D! [outputs.influxdb_v2] Buffer fullness: 5356 / 10000 metrics
+2021-05-10T10:02:34Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=60
+2021-05-10T10:02:34Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 328.154601ms
+2021-05-10T10:02:34Z D! [outputs.influxdb_v2] Buffer fullness: 5030 / 10000 metrics
+2021-05-10T10:02:38Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=38
+2021-05-10T10:02:38Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 295.143915ms
+2021-05-10T10:02:38Z D! [outputs.influxdb_v2] Buffer fullness: 5260 / 10000 metrics
+2021-05-10T10:02:43Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=32
+2021-05-10T10:02:43Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 295.467453ms
+2021-05-10T10:02:43Z D! [outputs.influxdb_v2] Buffer fullness: 5200 / 10000 metrics
+2021-05-10T10:02:48Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=56
+2021-05-10T10:02:48Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 315.226551ms
+2021-05-10T10:02:48Z D! [outputs.influxdb_v2] Buffer fullness: 5308 / 10000 metrics
+2021-05-10T10:02:53Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=60
+2021-05-10T10:02:53Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 305.826339ms
+2021-05-10T10:02:53Z D! [outputs.influxdb_v2] Buffer fullness: 5176 / 10000 metrics
+2021-05-10T10:02:57Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=46
+2021-05-10T10:02:57Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 311.630002ms
+2021-05-10T10:02:57Z D! [outputs.influxdb_v2] Buffer fullness: 5038 / 10000 metrics
+2021-05-10T10:02:59Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=50
+2021-05-10T10:02:59Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 325.656927ms
+2021-05-10T10:02:59Z D! [outputs.influxdb_v2] Buffer fullness: 5040 / 10000 metrics
+2021-05-10T10:03:04Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=52
+2021-05-10T10:03:04Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 297.523434ms
+2021-05-10T10:03:04Z D! [outputs.influxdb_v2] Buffer fullness: 5040 / 10000 metrics
+2021-05-10T10:03:08Z E! [outputs.influxdb_v2] Failed to write metric (will be dropped: 422 Unprocessable Entity): unprocessable entity: failure writing points to database: partial write: points beyond retention policy dropped=60
+2021-05-10T10:03:08Z D! [outputs.influxdb_v2] Wrote batch of 1000 metrics in 323.213725ms
+2021-05-10T10:03:08Z D! [outputs.influxdb_v2] Buffer fullness: 5292 / 10000 metrics
