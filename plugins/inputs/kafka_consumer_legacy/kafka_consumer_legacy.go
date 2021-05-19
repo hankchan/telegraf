@@ -147,6 +147,7 @@ func (k *Kafka) receiver() {
 				k.acc.AddError(fmt.Errorf("message longer than max_message_len (%d > %d)",
 					len(msg.Value), k.MaxMessageLen))
 			} else {
+				k.parser.SetDefaultTags(map[string]string{"topic": k.Topics[0]})
 				metrics, err := k.parser.Parse(msg.Value)
 				if err != nil {
 					// k.acc.AddError(fmt.Errorf("Message Parse Error\nmessage: %s\nerror: %s",
