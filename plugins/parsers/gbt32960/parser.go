@@ -29,6 +29,14 @@ func NewParser(metricName string, defaultTags map[string]string) *Parser {
 	}
 }
 
+/*
+Bug:
+
+2021-06-21T05:19:56Z I! -> TOOD: msg start err: 3041345042594333414132324258423152303230303031313839383630363137303430303437333638313037323032312d30362d32302032303a31343a353500000000052c052c00000000052c052c000000000101000000...
+panic: -> TOOD: msg start err: 3041345042594333414132324258423152303230303031313839383630363137303430303437333638313037323032312d30362d32302032303a31343a353500000000052c052c00000000052c052c000000000101000000...
+
+*/
+
 // Parse converts a slice of bytes in logfmt format to metrics.
 func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 
@@ -71,7 +79,7 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	// GBT 32960 报文头解析
 	// GBT 32960, [0,1]，起止符
 	if b[offset+0] != 0x23 || b[offset+1] != 0x23 {
-		log.Panicf("-> TOOD: msg start err: %x...", b)
+		log.Printf("-> TOOD: msg start err: %x...", b) // TODO: 错误的报文，需要确认原因
 		return nil, nil
 	}
 
