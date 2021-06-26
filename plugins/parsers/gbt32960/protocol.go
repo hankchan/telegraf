@@ -523,12 +523,17 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 		case data_type >= 0x80 && data_type <= 0xFE: // "用户自定义"
 			//log.Printf("-> %d %x %v\n", i, data_type, p.CheckDataType(data_type))
 			if data_type == 0xA0 || data_type == 0xA1 || data_type == 0xA2 || data_type == 0xA3 {
-
+				// TOOD: BMS关键数据
 				customLen := binary.BigEndian.Uint16(msg.body[i : i+2])
-				// log.Printf("-> TOOD: BMS关键数据: %s %d %x %d", msg.vin, len(msg.body[i:]), msg.body[i:], customLen)
+				// log.Printf("-> TOOD: BMS关键数据: %s %x %d %x %d", msg.vin, data_type, len(msg.body[i:]), msg.body[i:], customLen)
+				i += (2 + int(customLen))
+			} else if data_type == 0xA4 {
+				// TOOD: 换电矿卡数据
+				customLen := binary.BigEndian.Uint16(msg.body[i : i+2])
+				// log.Printf("-> TOOD: 换电矿卡数据: %s %x %d %x %d", msg.vin, data_type, len(msg.body[i:]), msg.body[i:], customLen)
 				i += (2 + int(customLen))
 			} else {
-				log.Panicf("-> TOOD: 未解析自定义数据: %s %d %x", msg.vin, len(msg.body), msg.body)
+				log.Panicf("-> TOOD: 未解析自定义数据: %s %x %d %x", msg.vin, data_type, len(msg.body), msg.body)
 			}
 		default:
 			// log.Printf("-> TOOD: unknown: %s %d %x", msg.vin, len(msg.body[i:]), msg.body[i:])

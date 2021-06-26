@@ -29,24 +29,48 @@ func NewParser(metricName string, defaultTags map[string]string) *Parser {
 	}
 }
 
+/*
+Bug:
+
+2021-06-21T05:19:56Z I! -> TOOD: msg start err: 3041345042594333414132324258423152303230303031313839383630363137303430303437333638313037323032312d30362d32302032303a31343a353500000000052c052c00000000052c052c000000000101000000...
+panic: -> TOOD: msg start err: 3041345042594333414132324258423152303230303031313839383630363137303430303437333638313037323032312d30362d32302032303a31343a353500000000052c052c00000000052c052c000000000101000000...
+
+*/
+
 // Parse converts a slice of bytes in logfmt format to metrics.
 func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 
+	//log.Printf("Parser: %+v", p)
+	var offset = 0
 	var msg = GBT32960Message{}
 
-	offset := 0
-	if b[0] != 0x20 {
+	// TODO： 判断数据来源，EV和BSS的kafka消息头不一样
+
+	if p.DefaultTags["topic"] == "platform-rms-streaming-topic" {
+		// Hyper BMCloud BSS: packid(24)+iccid(20)+datatime(19)+gbt32960()
+		offset += 24 // skip packid
+
 		// 默认情况，kafka: iccid(20)+datatime(19)+gbt32960()
-		offset = 39
-		msg.iccid = string(b[0:20])          // kafka里国标数据前有iccid
-		msg.strServerTime = string(b[20:39]) // kafka里国标数据前有格式化的时间戳
+		msg.iccid = string(b[offset+0 : offset+20])          // kafka里国标数据前有iccid
+		msg.strServerTime = string(b[offset+20 : offset+39]) // kafka里国标数据前有格式化的时间戳
+		offset += 39
+
 	} else {
-		// 异常情况，有时kafka会出现第一个是0x20(空格)的情况，即没有iccid
-		// unknown msg start: 20323032312d30342d32392031313a31363a3339232303fe4c45575445423134344
-		offset = 20
-		msg.iccid = ""
-		msg.strServerTime = string(b[1:20]) // 异常情况时，只有时间戳
-	}
+		//  Hyper BMCloud EV: iccid(20)+datatime(19)+gbt32960()
+
+		if b[offset] != 0x20 {
+			// 默认情况，kafka: iccid(20)+datatime(19)+gbt32960()
+			msg.iccid = string(b[offset+0 : offset+20])          // kafka里国标数据前有iccid
+			msg.strServerTime = string(b[offset+20 : offset+39]) // kafka里国标数据前有格式化的时间戳
+			offset += 39
+		} else {
+			// 异常情况，有时kafka会出现第一个是0x20(空格)的情况，即没有iccid
+			// unknown msg start: 20323032312d30342d32392031313a31363a3339232303fe4c45575445423134344
+			msg.iccid = ""
+			msg.strServerTime = string(b[offset+1 : offset+20]) // 异常情况时，只有时间戳
+			offset += 20
+		}
+	} // "hyperstrong-rms-streaming-topic"
 
 	// 获取服务器时间戳
 	loc, _ := time.LoadLocation("Asia/Shanghai")
@@ -55,7 +79,7 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 	// GBT 32960 报文头解析
 	// GBT 32960, [0,1]，起止符
 	if b[offset+0] != 0x23 || b[offset+1] != 0x23 {
-		log.Panicf("-> TOOD: msg start err: %x...", b)
+		log.Printf("-> TOOD: msg start err: %x...", b) // TODO: 错误的报文，需要确认原因
 		return nil, nil
 	}
 
