@@ -113,8 +113,8 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 
 	metrics := make([]telegraf.Metric, 0)
 
-	m1 := metric.New("gbt32960_msg", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, map[string]interface{}{GBT32960.CheckCommandFlag(msg.cmd): 1}, msg.tboxTime)
-	metrics = append(metrics, m1)
+	// m1 := metric.New("gbt32960_msg", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, map[string]interface{}{GBT32960.CheckCommandFlag(msg.cmd): 1}, msg.tboxTime)
+	// metrics = append(metrics, m1)
 
 	switch {
 	case msg.cmd == 0x01:
