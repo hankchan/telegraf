@@ -48,15 +48,15 @@ const (
 )
 
 type EvData struct {
-	Sn            uint16 `json:"登入流水号"`
+	Sn            uint16 `json:"流水号"`
 	Iccid         string `json:"ICCID"`
-	Pack_count    byte   `json:"可充电储能子系统数"`
-	Pack_code_len byte   `json:"可充电储能系统编码长度"`
-	Pack_code     string `json:"可充电储能系统编码"`
+	Pack_count    byte   `json:"子系统数"`
+	Pack_code_len byte   `json:"编码长度"`
+	Pack_code     string `json:"电池编码"`
 }
 
 type EvLogout struct {
-	Sn uint16 `json:"登出流水号"`
+	Sn uint16 `json:"流水号"`
 }
 
 type VcuData struct {
@@ -69,25 +69,25 @@ type VcuData struct {
 	Voltage         uint16 `json:"总电压"`
 	Current         uint16 `json:"总电流"`
 	Soc             uint8  `json:"SOC"`
-	Dc_status       uint8  `json:"DC-DC状态"`
+	Dc_status       uint8  `json:"DCDC状态"`
 	Stall           uint8  `json:"档位"`
 	Resistance      uint16 `json:"绝缘电阻"`
-	Acc_pedal       uint8  `json:"加速踏板行程值"`
-	Braking_status  uint8  `json:"制动踏板状态"`
+	Acc_pedal       uint8  `json:"加速踏板"`
+	Braking_status  uint8  `json:"制动踏板"`
 }
 
 /*
  * Driving motor data
  */
 type MotorInfo struct {
-	Motor_SN     uint8  `json:"驱动电机序号"`
-	Motor_status uint8  `json:"驱动电机状态"`
-	Motor_ctr    uint8  `json:"驱动电机控制器温度"`
-	Motor_speed  uint16 `json:"驱动电动转速"`
-	Motororque   uint16 `json:"驱动电机转矩"`
-	Motor        uint8  `json:"驱动电机温度"`
-	Motor_ctr_v  uint16 `json:"电机控制器输入电压"`
-	Motor_ctr_c  uint16 `json:"电机控制器直流母线电流"`
+	Motor_SN     uint8  `json:"电机序号"`
+	Motor_status uint8  `json:"电机状态"`
+	Motor_ctr    uint8  `json:"电机温度"`
+	Motor_speed  uint16 `json:"电动转速"`
+	Motororque   uint16 `json:"电机转矩"`
+	Motor        uint8  `json:"电机温度"`
+	Motor_ctr_v  uint16 `json:"电机电压"`
+	Motor_ctr_c  uint16 `json:"电机电流"`
 }
 
 type MotorData struct {
