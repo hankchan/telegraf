@@ -154,7 +154,7 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 
 	if mapResult != nil {
 		// m := metric.New("gbt32960", map[string]string{"vin": string(msg.vin)}, mapResult, strTime)
-		m2 := metric.New("gbt32960", map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, mapResult, msg.tboxTime)
+		m2 := metric.New("telegraf_"+p.DefaultTags["topic"], map[string]string{"vin": string(msg.vin), "iccid": string(msg.iccid)}, mapResult, msg.tboxTime)
 		metrics = append(metrics, m2)
 	}
 	return metrics, nil
