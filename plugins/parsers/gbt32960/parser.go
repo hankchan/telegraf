@@ -55,7 +55,7 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 		msg.strServerTime = string(b[offset+20 : offset+39]) // kafka里国标数据前有格式化的时间戳
 		offset += 39
 
-	} else {
+	} else if p.DefaultTags["topic"] == "hyperstrong-rms-streaming-topic" {
 		//  Hyper BMCloud EV: iccid(20)+datatime(19)+gbt32960()
 
 		if b[offset] != 0x20 {
@@ -70,7 +70,17 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 			msg.strServerTime = string(b[offset+1 : offset+20]) // 异常情况时，只有时间戳
 			offset += 20
 		}
-	} // "hyperstrong-rms-streaming-topic"
+	} else if p.DefaultTags["topic"] == "hyperstrong-em-streaming-topic" {
+		//  Hyper BMCloud EM: iccid(20)+datatime(19)+gbt32960()
+
+		// 默认情况，kafka: iccid(20)+datatime(19)+gbt32960()
+		msg.iccid = string(b[offset+0 : offset+20])          // kafka里国标数据前有iccid
+		msg.strServerTime = string(b[offset+20 : offset+39]) // kafka里国标数据前有格式化的时间戳
+		offset += 39
+	} else {
+		log.Printf("-> TOOD: unknown kafka topic: %s", p.DefaultTags["topic"]) // TODO: 错误的kafka消息，需要确认原因
+		return nil, nil
+	}
 
 	// 获取服务器时间戳
 	loc, _ := time.LoadLocation("Asia/Shanghai")

@@ -532,6 +532,11 @@ func (p *GBT32960Protocol) UnpackEVData(msg *GBT32960Message) (map[string]interf
 				customLen := binary.BigEndian.Uint16(msg.body[i : i+2])
 				// log.Printf("-> TOOD: 换电矿卡数据: %s %x %d %x %d", msg.vin, data_type, len(msg.body[i:]), msg.body[i:], customLen)
 				i += (2 + int(customLen))
+			} else if data_type == 0xB0 || data_type == 0xB1 || data_type == 0xB2 {
+				// TOOD: 工程机械数据
+				customLen := binary.BigEndian.Uint16(msg.body[i : i+2])
+				// log.Printf("-> TOOD: 工程机械数据: %s %x %d %x %d", msg.vin, data_type, len(msg.body[i:]), msg.body[i:], customLen)
+				i += (2 + int(customLen))
 			} else {
 				log.Panicf("-> TOOD: 未解析自定义数据: %s %x %d %x", msg.vin, data_type, len(msg.body), msg.body)
 			}
