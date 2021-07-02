@@ -134,6 +134,11 @@ func (p *Parser) Parse(b []byte) ([]telegraf.Metric, error) {
 			return nil, ErrNoMetric
 		}
 	case msg.cmd == 0x02 || msg.cmd == 0x03:
+
+		// if msg.cmd == 0x03 {
+		// 	log.Printf("-> Tips: 发现补发数据: %x %x...", msg.cmd, b)
+		// }
+
 		// 实时信息上报 or 补发信息上报
 		if mapResult, err = GBT32960.UnpackEVData(&msg); err != nil {
 			log.Panicf("-> TOOD: UnpackEVData err: %x...", b)
