@@ -6,5 +6,4 @@
 /vendor
 .DS_Store
 process.yml
-/*.conf
-/*.log
+/.vscode
